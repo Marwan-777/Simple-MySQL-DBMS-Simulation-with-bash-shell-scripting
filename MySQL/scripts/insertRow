@@ -1,0 +1,88 @@
+#!usr/bin/bash
+
+dir=$(dirname "$0")
+
+#condition to check the authority
+if [[ $(grep -c $USER $dir/../files/DB_admins.db ) == 0 ]]
+then
+        echo "You are not authorized to insert rows in any table!"
+        exit
+fi
+
+
+#condition to check if there exists any database
+if test -d $dir/../DataBases;
+then
+        if [[ $(ls $dir/../DataBases | wc -l) != 0 ]]
+        then
+                all_dbs=$(ls $dir/../DataBases)
+        else
+                echo "There isn't any created DatabBase yet!"
+        exit
+        fi
+else
+        echo "There isn't any created DataBase yet!"
+        exit
+fi
+
+all_dbs=$(ls $dir/../DataBases)
+echo
+echo "In which Database ?"
+select db in $all_dbs " << Back << "
+do
+
+    if [[ $db == " << Back << " ]]
+    then
+            exit
+    fi
+
+
+    owner=$(cat $dir/../DataBases/$db/owner.txt)
+    if [[ $USER != $owner ]]
+    then
+            echo "You are not the owner of this Database!"
+            exit
+    fi
+
+    if [[ $(ls $dir/../DataBases/$db | wc -l) < 2 ]]
+    then 
+        echo "There isn't any created Tables yet!"
+	exit
+    fi
+
+
+    tables=$(ls $dir/../DataBases/$db | grep -v owner.txt)
+    echo
+    echo "In which Table ?"
+    select table in $tables
+    do
+     cols=$(head -n1 $dir/../DataBases/$db/$table | tr ',' '\n' )
+     row=""
+     for col in $cols
+     do
+     	echo "Enter the value of $col"
+     	read value
+	if [[ $row == "" ]] #first column
+	then
+	    if [[ $(tail -n+2 $dir/../DataBases/$db/$table | cut -d: -f1 | grep -wc $value ) != 0 ]]
+	    then
+		echo "First column must be unique!"
+	 	exit
+	    fi
+	fi
+     	row=$row:$value
+     done
+     row=${row#?}
+     echo $row >> $dir/../DataBases/$db/$table
+     echo "Row is inserted successfully"	
+     exit
+    done
+    
+
+done
+
+
+
+
+
+

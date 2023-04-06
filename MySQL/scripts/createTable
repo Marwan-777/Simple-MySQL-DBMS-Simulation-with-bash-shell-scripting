@@ -1,0 +1,82 @@
+#!usr/bin/bash
+
+dir=$(dirname "$0")
+
+#condition to check the authority
+if [[ $(grep $USER $dir/../files/DB_admins.db | wc -l ) == 0 ]]
+then
+        echo "You are not authorized to create a Table!"
+        exit
+fi
+
+
+#condition to check if there exists any database
+if test -d $dir/../DataBases;
+then
+        if [[ $(ls $dir/../DataBases | wc -l) != 0 ]]
+        then
+                all_dbs=$(ls $dir/../DataBases)
+        else
+                echo "There isn't any created DatabBase yet!"
+        exit
+        fi
+else
+        echo "There isn't any created DataBase yet!"
+        exit
+fi
+
+all_dbs=$(ls $dir/../DataBases)
+echo
+echo "In which Database you would like to create a Table ?"
+select db in $all_dbs " << Back << "
+do
+
+        if [[ $db == " << Back << " ]]
+        then
+                exit
+        fi
+
+
+        owner=$(cat $dir/../DataBases/$db/owner.txt)
+        if [[ $USER != $owner ]]
+        then
+                echo "You are not the owner of this Database!"
+                exit
+        fi
+
+	
+	echo "Enter the name of the Table"
+	read tablename
+
+	if [[ $(ls $dir/../DataBases//$db | grep $tablename | wc -l ) == 0 ]]
+	then
+	    #Create the Table
+	    echo
+	    echo "Enter the number of columns"
+	    read columnsNo
+	    cols=""
+	    for i in $(seq 1 $columnsNo)
+	    do
+	        echo "Enter column $i name"
+		read colname
+		cols=$cols,$colname
+	    done
+	    cols=${cols#?}
+	    touch $dir/../DataBases/$db/$tablename
+	    echo $cols > $dir/../DataBases/$db/$tablename
+	    echo 
+	    echo "Table is created successfully"
+	    exit
+	else
+	    echo "This Table name already exists!"
+	    exit
+        fi
+done
+
+
+
+
+
+
+
+

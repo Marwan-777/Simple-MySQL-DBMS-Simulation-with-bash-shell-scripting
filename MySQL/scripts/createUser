@@ -1,0 +1,23 @@
+#!usr/bin/bash
+
+dir=$(dirname "$0")
+
+if [[ $(grep $USER $dir/../files/DB_admins.db | wc -l ) == 0 ]]
+then 
+	echo "You are not authorized to create a Database User! "
+	exit
+
+fi
+echo
+echo "Enter the User name you want to add"
+read username
+if [[ $(grep $username $dir/../files/DB_admins.db | wc -l) != 0 ]]
+then
+	echo "This User already exists!"
+	exit
+fi
+echo $username >> $dir/../files/DB_admins.db
+echo "User is added successfully"
+echo
+
+

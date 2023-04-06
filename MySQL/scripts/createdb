@@ -1,0 +1,32 @@
+#!/usr/bin/bash
+
+dir=$(dirname "$0")
+
+#checking the permissions
+if [[ $(grep $USER $dir/../files/DB_admins.db | wc -l) == 0 ]]
+then
+	echo "You are not authorized to create a Database!"
+	exit
+fi
+
+echo
+echo "Enter the database name: "
+read dbname
+
+mkdir -p $dir/../DataBases
+if [[ $(ls $dir/../DataBases | grep $dbname  | wc -l) != 0 ]]
+then
+    echo "This name already exists!"
+    exit
+fi
+
+
+
+mkdir -p $dir/../DataBases/$dbname
+touch $dir/../DataBases/$dbname/owner.txt
+echo $USER >> $dir/../DataBases/$dbname/owner.txt
+echo "Database is created successfully "
+echo
+
+
+

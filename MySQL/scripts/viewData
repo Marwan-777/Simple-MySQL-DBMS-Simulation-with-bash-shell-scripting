@@ -1,0 +1,69 @@
+#!usr/bin/bash
+
+dir=$(dirname "$0")
+
+#condition to check if there exists any database
+if test -d $dir/../DataBases;
+then
+        if [[ $(ls $dir/../DataBases | wc -l) != 0 ]]
+        then
+                all_dbs=$(ls $dir/../DataBases)
+        else
+                echo "There isn't any created DatabBase yet!"
+        exit
+        fi
+else
+        echo "There isn't any created DataBase yet!"
+        exit
+fi
+echo
+echo "From which Database ?"
+echo
+select db in $all_dbs " << Back << "
+do
+        if [[ $db == " << Back << " ]]
+        then
+                exit
+        fi
+
+	if [[ $(ls $dir/../DataBases/$db | wc -l) < 2 ]]
+        then
+            echo "There isn't any created Tables yet!"
+            exit
+        fi
+
+	tables=$(ls $dir/../DataBases/$db | grep -v owner.txt)
+        echo
+        echo "From which Table ?"
+        select table in $tables
+        do
+	    if [[ $(cat $dir/../DataBases/$db/$table | wc -l) < 2 ]]
+	    then
+		echo "This Table doesn't contain any data yet!"
+		exit
+	    fi
+	echo
+	echo "How would you like to get the data"
+	    select option in "Show All" "Search by word"
+	    do
+		if [[ $option == "Show All" ]]
+		then
+		    echo 
+		    echo "Requested data: "
+		    cat $dir/../DataBases/$db/$table
+		fi
+
+		if [[ $option == "Search by word" ]]
+		then
+		    echo "Enter the word"
+		    read word
+		    echo
+		    echo "Requested data: "
+		    grep -w $word $dir/../DataBases/$db/$table
+		fi
+		exit
+	    done
+	
+	done
+
+done

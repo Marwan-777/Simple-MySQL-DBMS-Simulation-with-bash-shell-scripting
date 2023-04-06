@@ -1,0 +1,34 @@
+#!usr/bin/bash
+
+dir=$(dirname "$0")
+
+if [[ $(grep $USER $dir/../files/DB_admins.db | wc -l ) == 0 ]]
+then
+	echo "You are not authorized to delete a Database User!"
+	exit
+fi
+
+users=$(cat $dir/../files/DB_admins.db)
+echo
+echo "Which User would you like to delete ?"
+echo
+select user in $users " << Back << "
+do
+	if [[ $user == " << Back << " ]]
+	then 
+	    exit
+	fi
+
+	if [[ $user == "oracle" ]]
+	then
+	    echo "This User can't be deleted!"
+	    exit
+	fi
+
+	touch $dir/../files/temp
+	grep -v $user $dir/../files/DB_admins.db > $dir/../files/temp
+	rm $dir/../files/DB_admins.db
+	mv $dir/../files/temp $dir/../files/DB_admins.db
+	echo "User is deleteed Successfully"
+	exit
+done

@@ -1,0 +1,44 @@
+#!usr/bin/bash
+dir=$(dirname "$0")
+
+#checking the permission
+if [[ $( grep $USER $dir/../files/DB_admins.db | wc -l) == 0 ]]
+then
+	echo "You are not authorized to delete any Database! "
+	exit
+fi 
+
+#condition to check if there exists any database
+if test -d $dir/../DataBases;
+then
+	if [[ $(ls $dir/../DataBases | wc -l) != 0 ]]
+	then
+		all_dbs=$(ls $dir/../DataBases)
+	else
+		echo "There isn't any created DatabBase yet!"
+	exit
+	fi
+else
+	echo "There isn't any created DataBase yet!"
+	exit
+fi
+echo
+echo "Which DataBase would you like to delete ?"
+echo 
+select db in $all_dbs " << Back << "
+do
+	if [[ $db == " << Back << " ]]
+	then 
+		exit
+	fi
+	owner=$(cat $dir/../DataBases/$db/owner.txt)
+	if [[ $USER != $owner ]] 
+	then
+		echo "You are not the owner of this Database !"
+		break
+	else
+		rm -r $dir/../DataBases/$db
+		echo "DataBase is deleted successfully "
+		break
+	fi
+done
