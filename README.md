@@ -1,33 +1,45 @@
 # Simple-MySQL-DBMS-Simulation-with-bash-shell-scripting
 
+## Project Structure
+The project is structured as follows:
 
-MySQL Bash Project
-This project is a command-line interface (CLI) simulation of the MySQL database written in Bash scripting language. It provides users with a set of functionalities to manage a database system, including creating and deleting databases, creating tables, inserting rows, and selecting data.
-
-Project Structure
-The project is structured in a directory called MySQL that contains the following files and directories:
-
-main.sh: the main script that prompts users to select a functionality and runs the corresponding script.
-DB_admins.db: a file that stores a list of admin users, including the default system user oracle.
-DataBases: a directory that stores all the created databases.
+A main script called main.sh located in the MySQL directory
+A DataBases directory that contains all created databases and their tables
+A DB_admins.db file that contains a list of admin users for the databases
 Functionality
-1. Create Database User
-Users can create a new admin user by running the Create Database User functionality. If the user running the script is an admin user, the script will prompt the user to enter a new admin username. If the username already exists in the DB_admins.db file, the script will display an error message. Otherwise, the new user will be added to the DB_admins.db file.
+Upon running the main.sh script, the user is prompted to select from a list of actions:
 
-2. Delete Database User
-Only admin users can delete other admin users by running the Delete Database User functionality. The script will display a list of all admin users stored in the DB_admins.db file. If an admin user is selected, the script will remove the user from the DB_admins.db file. The oracle user cannot be deleted.
+Create a new database user
+Delete an existing database user
+Create a new database
+Delete an existing database
+Create a new table inside a database
+Insert a new row in a table
+Select data from a table
+Each action is only accessible by users listed in the DB_admins.db file.
 
-3. Create New Database
-Admin users can create a new database by running the Create New Database functionality. The script will prompt the user to enter a name for the new database. The script will then create a new directory with the entered database name under the MySQL/DataBases/ directory. A file named owner.txt will be created in this directory, containing the username of the user who created the database.
+## Create Database User
+This action creates a new database user that is added to the DB_admins.db file. The user running the script must either be the default "oracle" user or an admin user.
 
-4. Delete an Existing Database
-Admin users can delete an existing database by running the Delete an Existing Database functionality. The script will display a list of all created databases under the MySQL/DataBases/ directory. If the database owner is the same as the user running the script, the script will delete the database directory and its contents.
+## Delete Database User
+This action deletes an existing database user from the DB_admins.db file. Only admin users can access this action.
 
-5. Create a New Table Inside Database
-Admin users can create a new table inside a database by running the Create a New Table Inside Database functionality. The script will display a list of all created databases under the MySQL/DataBases/ directory. If the selected database owner is the same as the user running the script, the script will prompt the user to enter a table name and the number of columns to create. If the table name does not already exist in the database, the script will prompt the user to enter the column names according to the entered number of columns. The final output for this script will create a file named with the entered table name under the corresponding database directory.
+## Create New Database
+This action creates a new database under the DataBases directory with a specified owner. Only admin users can access this action.
 
-6. Insert a New Row in a Table
-Admin users can insert a new row in a table by running the Insert a New Row in a Table functionality. The script will display a list of all created databases under the MySQL/DataBases/ directory to select a working database. If the selected database owner is the same as the user running the script, the script will display a list of all available tables inside the database to select from. For the selected table, the script will read the table header and prompt the user to enter the data for the new row. The first column must be always unique.
+## Delete Existing Database
+This action deletes an existing database from the DataBases directory. Only the database owner or an admin user can access this action.
 
-7. Select Data from Table
-Users can
+## Create New Table
+This action creates a new table within a specified database. The user is prompted to enter the table name and the number of columns needed. If the table does not already exist in the database, the user is prompted to enter column names according to the number of columns. The final output of this action is a file named with the entered table name in the appropriate database directory.
+
+## Insert New Row
+This action inserts a new row into a specified table in a specified database. The user is prompted to select the database and table, and then to enter the values for each column. The first column must always be unique.
+
+## Select Data from Table
+This action allows the user to either display the content of a selected table or search for rows that contain a specified string. The user is prompted to select the database and table before selecting an option.
+
+## Usage
+To use this project, simply clone this repository to your local machine and run the main.sh script.
+
+We hope this project proves useful in simulating MySQL databases through Bash scripting!
