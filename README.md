@@ -10,13 +10,20 @@ Functionality
 Upon running the main.sh script, the user is prompted to select from a list of actions:
 
 Create a new database user
+
 Delete an existing database user
+
 Create a new database
+
 Delete an existing database
+
 Create a new table inside a database
+
 Insert a new row in a table
+
 Select data from a table
-Each action is only accessible by users listed in the DB_admins.db file.
+
+Some actions are only accessible by users listed in the DB_admins.db file.
 
 ## Create Database User
 This action creates a new database user that is added to the DB_admins.db file. The user running the script must either be the default "oracle" user or an admin user.
