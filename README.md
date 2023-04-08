@@ -48,5 +48,3 @@ This action allows the user to either display the content of a selected table or
 
 ## Usage
 To use this project, simply clone this repository to your local machine and run the main.sh script.
-
-We hope this project proves useful in simulating MySQL databases through Bash scripting!
